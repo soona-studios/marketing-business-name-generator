@@ -20,6 +20,16 @@ function addEventListeners() {
   document
     .querySelector("#bng-nxt-btn")
     .addEventListener("click", handleSubmitForm);
+
+  document
+    .querySelector("#new-prompt-btn")
+    .addEventListener("click", handleSubmitForm);
+
+  document
+    .querySelector("#regenerate-current-names")
+    .addEventListener("click", handleSubmitForm);
+
+  document.querySelector("#restart-form").addEventListener("click", resetState);
 }
 
 function resetPollCount() {
@@ -30,19 +40,43 @@ function throwError(error) {
   throw new Error(error);
 }
 
+function addClass(selector, className) {
+  const $el = document.querySelector(selector);
+  $el.classList.add(className);
+}
+
+function removeClass(selector, className) {
+  const $el = document.querySelector(selector);
+  $el.classList.remove(className);
+}
+
 function showLoadingState() {
-  const $loading = document.querySelector("#loading-state");
-  $loading.style.display = "flex";
+  addClass("#loading-state", "show");
 }
 
 function hideLoadingState() {
-  const $loading = document.querySelector("#loading-state");
-  $loading.style.display = "none";
+  removeClass("#loading-state", "show");
 }
 
 function showErrorState() {
-  const $error = document.querySelector("#error-state");
-  $error.style.display = "flex";
+  addClass("#error-state", "show");
+}
+
+function hideErrorState() {
+  removeClass("#error-state", "show");
+}
+
+function renderErrorState(error = null) {
+  if (error) console.error(error);
+  hideLoadingState();
+  showErrorState();
+  resetPollCount();
+}
+
+function resetState() {
+  hideLoadingState();
+  hideErrorState();
+  resetPollCount();
 }
 
 function generateEmailLeadPayload(email) {
@@ -118,8 +152,7 @@ function rerunPollStatus(jobId) {
 
 function completeForm(output) {
   renderResultsToDOM(output);
-  // hideLoadingState();
-  resetPollCount();
+  resetState();
 }
 
 async function pollStatus(jobId) {
@@ -129,22 +162,21 @@ async function pollStatus(jobId) {
     const isComplete = data.status === "complete";
     const output = formatOutput(data.outputs?.company_name);
     const errorMessage = data.outputs?.message;
-    console.log("data:", data);
 
     if (!isComplete && pollCount < 10) rerunPollStatus(jobId);
     else if (isComplete && output) completeForm(output);
-    else if (errorMessage) console.error(errorMessage);
-    else throwError("Fetching the data failed. Please try again.");
+    else if (errorMessage) renderErrorState(errorMessage);
+    else {
+      throwError("Fetching the data failed. Please try again.");
+      renderErrorState();
+    }
   } catch (error) {
-    console.error(error);
-    hideLoadingState();
-    showErrorState();
-    resetPollCount();
+    renderErrorState(error);
   }
 }
 
 async function handleSubmitForm() {
-  // showLoadingState();
+  showLoadingState();
   sendNewEmailLead(document.querySelector("#email-input").value);
 
   const payload = generateMainPayload();
@@ -160,6 +192,7 @@ async function handleSubmitForm() {
 
     if (!response.ok) {
       throwError("Sending the request failed. Please try again.");
+      renderErrorState();
     }
 
     const responseData = await response.json();
@@ -168,8 +201,6 @@ async function handleSubmitForm() {
       pollStatus(responseData.provider_job_id);
     }
   } catch (error) {
-    console.error(error);
-    hideLoadingState();
-    showErrorState();
+    renderErrorState(error);
   }
 }
