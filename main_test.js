@@ -28,8 +28,6 @@ function addEventListeners() {
   document
     .querySelector("#regenerate-current-names")
     .addEventListener("click", handleSubmitForm);
-
-  document.querySelector("#restart-form").addEventListener("click", resetState);
 }
 
 function resetPollCount() {
