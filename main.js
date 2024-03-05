@@ -28,6 +28,10 @@ function addEventListeners() {
   document
     .querySelector("#regenerate-current-names")
     .addEventListener("click", handleSubmitForm);
+
+  document
+    .querySelector("#submit-email-btn")
+    .addEventListener("click", handleGenerateClick);
 }
 
 function resetPollCount() {
@@ -77,6 +81,11 @@ function resetState() {
   resetPollCount();
 }
 
+function handleGenerateClick() {
+  showLoadingState();
+  setTimeout(() => hideLoadingState, 3000);
+}
+
 function generateEmailLeadPayload(email) {
   return {
     new_lead: {
@@ -111,6 +120,11 @@ function sendNewEmailLead(email) {
 
   setLocalStorage(email);
   postEmailLead(payload);
+}
+
+function determineIfLoading(id) {
+  if (id === "bng-nxt-btn") return false;
+  return true;
 }
 
 function generateMainPayload() {
@@ -173,8 +187,11 @@ async function pollStatus(jobId) {
   }
 }
 
-async function handleSubmitForm() {
-  showLoadingState();
+async function handleSubmitForm(e) {
+  const showLoading = determineIfLoading(e.target.id);
+
+  if (showLoading) showLoadingState();
+
   sendNewEmailLead(document.querySelector("#email-input").value);
 
   const payload = generateMainPayload();
