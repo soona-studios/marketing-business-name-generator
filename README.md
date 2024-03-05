@@ -2,10 +2,21 @@
 
 this is the code for our [business name generator](https://soona.co/business-name-generator). it uses the 'Business Name Generator #2' Spell on [Respell](https://app.respell.ai/spells), which takes in a brand description and outputs nine (9) business name ideas. it is deployed via CDN in [Webflow](https://soona-new.design.webflow.com/).
 
-to test locally:
+## To Test Locally
 
-- open `live_page_test.html` in your browser
-- make sure the correct `baseUrl` is set in `main_test.js`
+- in the main `book-soona` codebase, add the following to `cors.rb`
+```ruby
+    allow do
+      origins '*'
+      resource '*',
+        headers: :any,
+        methods: [:connect, :delete, :get, :head, :options, :patch, :post, :put]
+    end
+```
+- in the main `book-soona` codebase, run `foreman start`
+- in a ternimal anywhere, start your `soona-NAME.ngrok.io`
+- in this marketing repository codebase, update `baseUrl` in `main_test.js` to your `ngrok`
+- in this marketing repository codebase, open `live_page_test.html` in your browser
 - NOTE: `live_page_test.html` is missing error handling & loading states
 
 also included is a local command line setup. this is commented out at the bottom of `main_test.js`. in order to use this:
