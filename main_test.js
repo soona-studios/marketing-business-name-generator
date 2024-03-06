@@ -42,6 +42,11 @@ function throwError(error) {
   throw new Error(error);
 }
 
+function checkForClass(selector, className) {
+  const $el = document.querySelector(selector);
+  return $el.classList.contains(className);
+}
+
 function addClass(selector, className) {
   const $el = document.querySelector(selector);
   $el.classList.add(className);
@@ -53,19 +58,23 @@ function removeClass(selector, className) {
 }
 
 function showLoadingState() {
-  addClass("#loading-state", "show");
+  const isAlreadyShown = checkForClass("#loading-state", "show");
+  if (!isAlreadyShown) addClass("#loading-state", "show");
 }
 
 function hideLoadingState() {
-  removeClass("#loading-state", "show");
+  const isAlreadyShown = checkForClass("#loading-state", "show");
+  if (isAlreadyShown) removeClass("#loading-state", "show");
 }
 
 function showErrorState() {
-  addClass("#error-state", "show");
+  const isAlreadyShown = checkForClass("#error-state", "show");
+  if (!isAlreadyShown) addClass("#error-state", "show");
 }
 
 function hideErrorState() {
-  removeClass("#error-state", "show");
+  const isAlreadyShown = checkForClass("#error-state", "show");
+  if (isAlreadyShown) removeClass("#error-state", "show");
 }
 
 function renderErrorState(error = null) {
@@ -83,7 +92,7 @@ function resetState() {
 
 function handleGenerateClick() {
   showLoadingState();
-  setTimeout(() => hideLoadingState, 3000);
+  setTimeout(() => hideLoadingState(), 3000);
 }
 
 function generateEmailLeadPayload(email) {
@@ -123,8 +132,14 @@ function sendNewEmailLead(email) {
 }
 
 function determineIfLoading(id) {
-  if (id === "bng-nxt-btn") return false;
+  if (!id || id === "bng-nxt-btn") return false;
   return true;
+}
+
+function removeSendButtonEventListener($el) {
+  if ($el.id === "bng-nxt-btn") {
+    $el.removeEventListener("click", handleSubmitForm);
+  }
 }
 
 function generateMainPayload() {
@@ -192,6 +207,7 @@ async function handleSubmitForm(e) {
 
   if (showLoading) showLoadingState();
 
+  removeSendButtonEventListener(e.target);
   sendNewEmailLead(document.querySelector("#email-input").value);
 
   const payload = generateMainPayload();
