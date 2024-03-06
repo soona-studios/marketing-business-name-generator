@@ -44,27 +44,27 @@ function throwError(error) {
 
 function checkForClass(selector, className) {
   const $el = document.querySelector(selector);
-  return $el.classList.contains(className);
+  return $el?.classList?.contains(className);
 }
 
 function addClass(selector, className) {
   const $el = document.querySelector(selector);
-  $el.classList.add(className);
+  $el?.classList?.add(className);
 }
 
 function removeClass(selector, className) {
   const $el = document.querySelector(selector);
-  $el.classList.remove(className);
+  $el?.classList?.remove(className);
 }
 
-function showLoadingState() {
-  const isAlreadyShown = checkForClass("#loading-state", "show");
-  if (!isAlreadyShown) addClass("#loading-state", "show");
+function showLoadingState(id = "#loading-state-1") {
+  const isAlreadyShown = checkForClass(id, "show");
+  if (!isAlreadyShown) addClass(id, "show");
 }
 
 function hideLoadingState() {
-  const isAlreadyShown = checkForClass("#loading-state", "show");
-  if (isAlreadyShown) removeClass("#loading-state", "show");
+  const isAlreadyShown = checkForClass(id, "show");
+  if (isAlreadyShown) removeClass(id, "show");
 }
 
 function showErrorState() {
@@ -205,7 +205,7 @@ async function pollStatus(jobId) {
 async function handleSubmitForm(e) {
   const showLoading = determineIfLoading(e.target.id);
 
-  if (showLoading) showLoadingState();
+  if (showLoading) showLoadingState("#loading-state-2");
 
   removeSendButtonEventListener(e.target);
   sendNewEmailLead(document.querySelector("#email-input").value);
