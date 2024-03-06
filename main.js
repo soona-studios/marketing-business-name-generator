@@ -44,20 +44,17 @@ function throwError(error) {
 
 function checkForClass(selector, className) {
   const $el = document.querySelector(selector);
-  console.log('checkForClass $el:',$el);
   if ($el) return $el.classList.contains(className);
   return false;
 }
 
 function addClass(selector, className) {
   const $el = document.querySelector(selector);
-  console.log('addClass $el:',$el);
   $el.classList.add(className);
 }
 
 function removeClass(selector, className) {
   const $el = document.querySelector(selector);
-  console.log('removeClass $el:',$el);
   $el.classList.remove(className);
 }
 
