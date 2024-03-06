@@ -62,7 +62,7 @@ function showLoadingState(id = "#loading-state-1") {
   if (!isAlreadyShown) addClass(id, "show");
 }
 
-function hideLoadingState() {
+function hideLoadingState(id = "#loading-state-1") {
   const isAlreadyShown = checkForClass(id, "show");
   if (isAlreadyShown) removeClass(id, "show");
 }
@@ -79,13 +79,13 @@ function hideErrorState() {
 
 function renderErrorState(error = null) {
   if (error) console.error(error);
-  hideLoadingState();
+  hideLoadingState("#loading-state-2");
   showErrorState();
   resetPollCount();
 }
 
 function resetState() {
-  hideLoadingState();
+  hideLoadingState("#loading-state-2");
   hideErrorState();
   resetPollCount();
 }
