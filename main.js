@@ -44,7 +44,7 @@ function throwError(error) {
 
 function checkForClass(selector, className) {
   const $el = document.querySelector(selector);
-  if ($el) return $el.classList?.contains(className);
+  if ($el) return $el.classList.contains(className);
   return false;
 }
 
@@ -86,6 +86,7 @@ function renderErrorState(error = null) {
 }
 
 function resetState() {
+  hideLoadingState();
   hideLoadingState("#loading-state-2");
   hideErrorState();
   resetPollCount();
@@ -93,7 +94,6 @@ function resetState() {
 
 function handleGenerateClick() {
   showLoadingState();
-  setTimeout(() => hideLoadingState(), 3000);
 }
 
 function generateEmailLeadPayload(email) {
@@ -133,6 +133,7 @@ function sendNewEmailLead(email) {
 }
 
 function determineIfLoading(id) {
+  // do not show loading state on first step 'next' click, but load on all other clicks
   if (!id || id === "bng-nxt-btn") return false;
   return true;
 }
@@ -182,8 +183,10 @@ function updateActiveStep() {
   const $stepTwo = document.querySelector("#step-2");
   const $stepThree = document.querySelector("#step-3");
 
-  $stepTwo.addClass("hide");
-  $stepThree.removeClass("hide");
+  if (!$stepTwo.classList.contains("hide")) {
+    $stepTwo.classList.add("hide");
+    $stepThree.classList.remove("hide");
+  }
 }
 
 function completeForm(output) {
