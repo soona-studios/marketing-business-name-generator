@@ -2,6 +2,8 @@ const EMAIL_STORAGE_KEY = "submitted_email";
 const baseUrl = "https://book.soona.co";
 
 let pollCount = 0;
+let hasClickedGenerate = false;
+let hasResults = false;
 
 initForm();
 
@@ -92,8 +94,43 @@ function resetState() {
   resetPollCount();
 }
 
+function checkForEmailValue() {
+  const $el = document.querySelector("#email-input");
+  return !!$el.value;
+}
+
+function updateActiveStep() {
+  const $stepTwo = document.querySelector("#step-2");
+  const $stepThree = document.querySelector("#step-3");
+
+  if (hasClickedGenerate && !$stepTwo.classList.contains("hide")) {
+    $stepTwo.classList.add("hide");
+    $stepThree.classList.remove("hide");
+  }
+}
+
+function hideLoadingStateIfNeeded() {
+  setTimeout(() => {
+    if (hasResults) {
+      hideLoadingState();
+      updateActiveStep();
+    }
+  }, 3000);
+}
+
+function focusEmailInput() {
+  const $el = document.querySelector("#email-input");
+  $el.focus();
+}
+
 function handleGenerateClick() {
-  showLoadingState();
+  const isValid = checkForEmailValue();
+
+  if (isValid) {
+    hasClickedGenerate = true;
+    showLoadingState();
+    hideLoadingStateIfNeeded();
+  } else focusEmailInput();
 }
 
 function generateEmailLeadPayload(email) {
@@ -179,17 +216,8 @@ function rerunPollStatus(jobId) {
   setTimeout(() => pollStatus(jobId), 3000);
 }
 
-function updateActiveStep() {
-  const $stepTwo = document.querySelector("#step-2");
-  const $stepThree = document.querySelector("#step-3");
-
-  if (!$stepTwo.classList.contains("hide")) {
-    $stepTwo.classList.add("hide");
-    $stepThree.classList.remove("hide");
-  }
-}
-
 function completeForm(output) {
+  hasResults = true;
   updateActiveStep();
   renderResultsToDOM(output);
   resetState();
