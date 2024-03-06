@@ -177,7 +177,16 @@ function rerunPollStatus(jobId) {
   setTimeout(() => pollStatus(jobId), 3000);
 }
 
+function updateActiveStep() {
+  const $stepTwo = document.querySelector("#step-2");
+  const $stepThree = document.querySelector("#step-3");
+
+  $stepTwo.addClass("hide");
+  $stepThree.removeClass("hide");
+}
+
 function completeForm(output) {
+  updateActiveStep();
   renderResultsToDOM(output);
   resetState();
 }
