@@ -44,17 +44,18 @@ function throwError(error) {
 
 function checkForClass(selector, className) {
   const $el = document.querySelector(selector);
-  return $el?.classList?.contains(className);
+  if ($el) return $el.classList?.contains(className);
+  return false;
 }
 
 function addClass(selector, className) {
   const $el = document.querySelector(selector);
-  $el?.classList?.add(className);
+  $el.classList.add(className);
 }
 
 function removeClass(selector, className) {
   const $el = document.querySelector(selector);
-  $el?.classList?.remove(className);
+  $el.classList.remove(className);
 }
 
 function showLoadingState(id = "#loading-state-1") {
