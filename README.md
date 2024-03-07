@@ -1,10 +1,11 @@
 # Business Name Generator
 
-this is the code for our [business name generator](https://soona.co/business-name-generator). it uses the 'Business Name Generator #2' Spell on [Respell](https://app.respell.ai/spells), which takes in a brand description and outputs nine (9) business name ideas. it is deployed via CDN in [Webflow](https://soona-new.design.webflow.com/).
+this is the code for our [business name generator](https://soona.co/business-name-generator). it uses the 'Business Name Generator #2' Spell on [Respell](https://app.respell.ai/spells), which takes in a brand description and outputs nine (9) business name ideas. it is deployed via CDN in [Webflow](https://soona-new.design.webflow.com/). when making changes to a Webflow page that uses the CDN we can purge the cache [here](https://www.jsdelivr.com/tools/purge). note that purging the cache doesn't always appear to work, and there's a limit to how many times you can attempt to purge it.
 
 ## To Test Locally
 
 - in the main `book-soona` codebase, add the following to `cors.rb`
+
 ```ruby
     allow do
       origins '*'
@@ -13,6 +14,7 @@ this is the code for our [business name generator](https://soona.co/business-nam
         methods: [:connect, :delete, :get, :head, :options, :patch, :post, :put]
     end
 ```
+
 - in the main `book-soona` codebase, run `foreman start`
 - in a ternimal anywhere, start your `soona-NAME.ngrok.io`
 - in this marketing repository codebase, update `baseUrl` in `main_test.js` to your `ngrok`
