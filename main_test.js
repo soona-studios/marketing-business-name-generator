@@ -190,7 +190,7 @@ function generateMainPayload() {
     generate: {
       provider: "respell",
       payload: {
-        spellId: "iLr2yg8cC4yfrx4iPiLm9",
+        spellId: "clzhrcyph00bmfid8ranjifwv",
         inputs: {
           business_brand_description: description,
         },
@@ -311,7 +311,7 @@ async function handleSubmitForm(e) {
 //     generate: {
 //       provider: "respell",
 //       payload: {
-//         spellId: "iLr2yg8cC4yfrx4iPiLm9",
+//         spellId: "clzhrcyph00bmfid8ranjifwv",
 //         inputs: {
 //           business_brand_description: description,
 //         },
